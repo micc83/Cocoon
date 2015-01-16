@@ -1,0 +1,8 @@
+{% macro input(name, label, value, type, size) %}
+  <div>
+    <label>
+      {{ label }}
+      <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+    </label>
+  </div>
+{% endmacro %}

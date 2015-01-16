@@ -1,0 +1,33 @@
+{
+  "name": "Cocoon",
+  "version": "1.0.0",
+  "type":"wordpress-plugin",
+  "time":"2015-01-14",
+  "authors": [
+    {
+      "name": "Alessandro Benoit",
+      "email": "micc83@gmail.com",
+      "homepage": "http://codeb.it",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "1.0.*",
+    "twig/twig":"~1.0"
+  },
+  "require-dev": {
+    "symfony/debug": "2.7.x-dev",
+    "symfony/var-dumper": "2.7.x-dev",
+    "klein/klein": "dev-master",
+    "illuminate/database": "5.0.*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cocoon\\Controllers\\":"plugin/controllers",
+      "Cocoon\\Models\\":"plugin/models",
+      "Cocoon\\Components\\":"plugin/components",
+      "Cocoon\\Patterns\\":"plugin/patterns"
+    }
+  },
+  "minimum-stability": "dev"
+}

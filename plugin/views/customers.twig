@@ -1,0 +1,19 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {{ parent() }}
+
+{% endblock %}
+
+{% block content %}
+  <h1>Dashboard</h1>
+  <p>Ciao {{ name }}</p>
+  <p>Here's your customers:</p>
+  <ul>
+  {% for customer in customers %}
+    <li>{{ customer.name }}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

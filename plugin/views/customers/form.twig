@@ -1,0 +1,12 @@
+{% import "macros/forms.twig" as forms %}
+<form method="POST" action="{{action}}">
+  {{ forms.input('name', 'Name and surname', customer.name) }}
+  {{ forms.input('email', 'Email', customer.email, 'email') }}
+  {{ forms.input('phone', 'Phone', customer.phone) }}
+  {% if method == 'PUT' %}
+  <input type="hidden" name="_method" value="put" />
+  <div><button type="submit">Update customer</button></div>
+  {% else %}
+  <div><button type="submit">Add customer</button></div>
+  {% endif %}
+</form>
