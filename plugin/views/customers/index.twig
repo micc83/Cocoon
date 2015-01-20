@@ -12,7 +12,7 @@
   <p>Here's your customers:</p>
   <ul>
   {% for customer in customers %}
-    <li>{{ customer.name }}</li>
+    <li>{{ customer.name }} | <a href="{{ customer.uri }}">Edit</a></li>
   {% endfor %}
   </ul>
 {% endblock %}

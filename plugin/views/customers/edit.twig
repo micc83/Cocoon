@@ -35,4 +35,8 @@
     <p>Non è stato trovato nessun risultato!</p>
   {% endif %}
 
+  {% autoescape false %}
+    {{ createLink('Back to home', '/customers') }}
+  {% endautoescape %}
+
 {% endblock %}
