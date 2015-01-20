@@ -21,7 +21,7 @@ class Database {
    * @var MySqlConnection
    */
   private $db,
-          $database;
+          $connection;
 
   static $prefix;
 
@@ -46,18 +46,8 @@ class Database {
     $database->bootEloquent();
 
     $this->db = $database;
+    $this->connection = $database->getConnection();
 
-    $this->database = $database->getConnection();
-
-  }
-
-  /**
-   * Return a table Object
-   * @param  String $table Table name
-   * @return Illuminate\Database\Query\Builder
-   */
-  static function table ($table) {
-    return(self::getDb()->table($table));
   }
 
   /**
@@ -65,7 +55,7 @@ class Database {
    * @return MySqlConnection
    */
   static function getDb() {
-    return self::instance()->database;
+    return self::instance()->connection;
   }
 
   /**
@@ -74,6 +64,14 @@ class Database {
    */
   static function schema() {
     return self::getDb()->getSchemaBuilder();
+  }
+
+  /**
+   * Get the database manager
+   * @return  Illuminate\Database\ConnectionResolverInterface Database Manager
+   */
+  static function getDatabaseManager() {
+    return self::instance()->db->getDatabaseManager();
   }
 
   /**
