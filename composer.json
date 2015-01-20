@@ -16,10 +16,12 @@
     "twig/twig":"~1.0"
   },
   "require-dev": {
-    "symfony/debug": "2.7.x-dev",
-    "symfony/var-dumper": "2.7.x-dev",
-    "klein/klein": "dev-master",
-    "illuminate/database": "5.0.*@dev"
+    "symfony/debug": "2.6.3",
+    "symfony/var-dumper": "2.6.3",
+    "klein/klein": "2.1.0",
+    "illuminate/database": "4.2.16",
+    "illuminate/validation": "4.2.16",
+    "illuminate/translation": "4.2.16"
   },
   "autoload": {
     "psr-4": {
