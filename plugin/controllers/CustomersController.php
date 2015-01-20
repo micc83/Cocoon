@@ -5,6 +5,7 @@ use Cocoon\Components\Database;
 use Cocoon\Components\Template;
 use Cocoon\Components\Router;
 use Cocoon\Models\Customer;
+use Cocoon\Components\Validator;
 
 /**
  * Main Controller
@@ -29,10 +30,12 @@ class CustomersController extends BaseController {
    */
   static function editCustomer ($request, $response, $service) {
 
+    $customer = Customer::find($request->id);
+
     return Template::render('customers/edit.twig', array(
-      'action'    =>  Router::getURI('/customers/' . $request->id),
+      'action'    =>  $customer->getURI(),
       'method'    =>  'PUT',
-      'customer'  =>  Customer::find($request->id),
+      'customer'  =>  $customer,
       'infos'     =>  $service->flashes('info'),
       'errors'    =>  $service->flashes('error')
     ));
@@ -45,13 +48,8 @@ class CustomersController extends BaseController {
   static function updateCustomer ($request, $response, $service) {
 
     // Validation
-    try {
-      $service->validateParam('name', 'Name must be set')->notNull();
-      $service->validateParam('email', 'Email was not in the correct format')->isEmail()->notNull();
-    } catch (\Exception $e) {
-      $service->flash($e->getMessage());
+    if (!Validator::validate($request->params(), Customer::$rules, $service)) 
       return $service->back();
-    }
 
     // Update
     $customer = Customer::find($request->id)->update($request->params());
@@ -89,23 +87,11 @@ class CustomersController extends BaseController {
   static function createCustomer ($request, $response, $service) {
 
     // Validation
-    try {
-      $service->validateParam('name', 'Name must be set')->notNull();
-      $service->validateParam('email', 'Email was not in the correct format')->isEmail()->notNull();
-    } catch (\Exception $e) {
-      $service->flash($e->getMessage());
+    if (!Validator::validate($request->params(), Customer::$rules, $service)) 
       return $service->back();
-    }
 
     // Update
     $customer = Customer::create($request->params());
-
-    // Verify update
-    if (!$customer){
-      $service->flash('There was an error trying to create the user', 'error');
-      return $service->back();
-    }
-
     $service->flash('Customer created', 'info');
     $response->redirect(Router::getURI('/customers/' . $customer->id));
 
