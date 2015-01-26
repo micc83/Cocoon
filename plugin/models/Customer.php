@@ -32,6 +32,3 @@ class Customer extends BaseModel {
     $this->attributes['uri'] = $this->getURI();
     return $this->attributes['uri'];
   }
-
-
-}
