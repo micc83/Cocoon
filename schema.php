@@ -5,7 +5,8 @@ use Cocoon\Components\Database;
 class CooconSchema {
 
   static private $versions = array(
-    '1.0.0' => 'create_customers_table'
+    '1.0.0' =>  'create_customers_table',
+    '1.0.6' =>  'add_uniquess_to_email'
   );
 
   /**
@@ -13,13 +14,21 @@ class CooconSchema {
    */
   static function create_customers_table () {
 
-    Database::schema()->create( Database::getPrefix() . 'customers', function ($table) {
+    Database::schema()->create('customers', function ($table) {
       $table->increments('id');
       $table->string('name', 100);
       $table->string('email');
       $table->string('phone');
       $table->softDeletes();
       $table->timestamps();
+    });
+
+  }
+
+  static function add_uniquess_to_email () {
+
+    Database::schema()->table('customers', function ($table) {
+      $table->unique('email');
     });
 
   }

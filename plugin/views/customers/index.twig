@@ -9,10 +9,17 @@
 
 {% block content %}
   <h1>Customers</h1>
+  
+  {% include 'layouts/flashes.twig' %}
+  
+  {{ createLink('Add new customer', '/customers/new') }}
+
   <p>Here's your customers:</p>
   <ul>
   {% for customer in customers %}
-    <li>{{ customer.name }}</li>
+    <li>{{ customer.name }} 
+      | {{ createLink('Edit', '/customers/' ~ customer.id) }}
+      | {{ deleteButton('Delete', '/customers/' ~ customer.id) }}</li>
   {% endfor %}
   </ul>
 {% endblock %}

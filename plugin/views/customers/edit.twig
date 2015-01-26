@@ -11,21 +11,7 @@
   
   <h1>Edit customer</h1>
 
-  {% if infos|length > 0 %}
-    <ul>
-    {% for info in infos %}
-      <li>{{ info }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-
-  {% if errors|length > 0 %}
-    <ul>
-    {% for error in errors %}
-      <li>{{ error }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+  {% include 'layouts/flashes.twig' %}
 
   <p>Here's your customer:</p>
 
@@ -34,5 +20,7 @@
   {% else %}
     <p>Non è stato trovato nessun risultato!</p>
   {% endif %}
-
+  
+  {{ createLink('Back to home', '/customers') }}
+  
 {% endblock %}

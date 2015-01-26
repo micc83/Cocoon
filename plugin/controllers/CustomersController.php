@@ -5,6 +5,7 @@ use Cocoon\Components\Database;
 use Cocoon\Components\Template;
 use Cocoon\Components\Router;
 use Cocoon\Models\Customer;
+use Cocoon\Components\Validator;
 
 /**
  * Main Controller
@@ -29,12 +30,12 @@ class CustomersController extends BaseController {
    */
   static function editCustomer ($request, $response, $service) {
 
+    $customer = Customer::find($request->id);
+
     return Template::render('customers/edit.twig', array(
-      'action'    =>  Router::getURI('/customers/' . $request->id),
+      'action'    =>  $customer->getURI(),
       'method'    =>  'PUT',
-      'customer'  =>  Customer::find($request->id),
-      'infos'     =>  $service->flashes('info'),
-      'errors'    =>  $service->flashes('error')
+      'customer'  =>  $customer
     ));
 
   }
@@ -45,13 +46,8 @@ class CustomersController extends BaseController {
   static function updateCustomer ($request, $response, $service) {
 
     // Validation
-    try {
-      $service->validateParam('name', 'Name must be set')->notNull();
-      $service->validateParam('email', 'Email was not in the correct format')->isEmail()->notNull();
-    } catch (\Exception $e) {
-      $service->flash($e->getMessage());
+    if (!Validator::validate($request->params(), Customer::$rules)) 
       return $service->back();
-    }
 
     // Update
     $customer = Customer::find($request->id)->update($request->params());
@@ -76,10 +72,8 @@ class CustomersController extends BaseController {
     return Template::render('customers/new.twig', array(
       'action'    =>  Router::getURI('/customers/'),
       'method'    =>  'POST',
-      'customer'  =>  $request->params(),
-      'infos'     =>  $service->flashes('info'),
-      'errors'    =>  $service->flashes('error')
-    ));
+      'customer'  =>  $request->params()
+    ), $service);
 
   }
 
@@ -89,26 +83,29 @@ class CustomersController extends BaseController {
   static function createCustomer ($request, $response, $service) {
 
     // Validation
-    try {
-      $service->validateParam('name', 'Name must be set')->notNull();
-      $service->validateParam('email', 'Email was not in the correct format')->isEmail()->notNull();
-    } catch (\Exception $e) {
-      $service->flash($e->getMessage());
+    if (!Validator::validate($request->params(), Customer::$rules)) 
       return $service->back();
-    }
 
     // Update
     $customer = Customer::create($request->params());
-
-    // Verify update
-    if (!$customer){
-      $service->flash('There was an error trying to create the user', 'error');
-      return $service->back();
-    }
-
     $service->flash('Customer created', 'info');
     $response->redirect(Router::getURI('/customers/' . $customer->id));
 
+  }
+
+  /**
+   * Delete customer
+   */
+  static function deleteCustomer ($request, $response, $service) {
+    require_once(ABSPATH .'wp-includes/pluggable.php');
+    if (wp_verify_nonce($request->_nonce, $request->param(0))){
+      Customer::find($request->id)->delete();
+      $service->flash('Customer deleted!', 'info');
+    } else {
+      wp_die('Feeling smart?');
+    }
+
+    $response->redirect(Router::getURI('/customers/'));
   }
 
 

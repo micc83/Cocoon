@@ -15,7 +15,7 @@ Router::add('GET', '/customers/new/?', array( 'Cocoon\Controllers\CustomersContr
 Router::add('GET', '/customers/[i:id]/?', array( 'Cocoon\Controllers\CustomersController', 'editCustomer' ));
 Router::add('POST', '/customers/?', array( 'Cocoon\Controllers\CustomersController', 'createCustomer' ));
 Router::add('PUT', '/customers/[i:id]/?', array( 'Cocoon\Controllers\CustomersController', 'updateCustomer' ));
-// Router::add('DELETE', '/customers/[i:id]', $callback);
+Router::add('DELETE', '/customers/[i:id]', array( 'Cocoon\Controllers\CustomersController', 'deleteCustomer' ));
 
 /**
  * Handle errors
