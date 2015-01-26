@@ -4,6 +4,7 @@ namespace Cocoon\Components;
 use \Cocoon\Patterns\Singleton;
 use \Cocoon\Components\Database;
 use \Cocoon\Components\Router;
+use \Cocoon\Components\App;
 use Illuminate\Validation\Factory;
 use Illuminate\Translation\Translator;
 use Illuminate\Translation\FileLoader;
@@ -23,7 +24,7 @@ class Validator {
    * Initialize the validator
    */
   function init() {
-    $translationLoader = new FileLoader(new Filesystem, COCOON_PATH . '/locale');
+    $translationLoader = new FileLoader(new Filesystem, App::getPluginPath() . '/plugin/locale');
     $translator = new Translator($translationLoader, 'it');
     $this->factory = new Factory($translator);
     $db = Database::getDatabaseManager();

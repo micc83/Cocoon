@@ -1,7 +1,7 @@
 <?php
 
 namespace Cocoon\Models;
-use \Cocoon\Components\Router;
+use \Cocoon\Components\App;
 
 /**
  * Post model
@@ -25,7 +25,7 @@ class Customer extends BaseModel {
   );
 
   public function getURI() {
-    return Router::getURI('/customers/' . $this->id);
+    return App::getUrl('/customers/' . $this->id);
   }
 
   public function getUriAttribute(){

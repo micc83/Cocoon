@@ -9,10 +9,6 @@ trait Singleton {
     return isset(static::$instance) ? static::$instance : static::$instance = new static;
   }
 
-  final public static function clean() {
-    return static::$instance = new static;
-  }
-
   final private function __construct() {
     static::init();
   }

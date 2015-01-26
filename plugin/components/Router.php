@@ -5,6 +5,7 @@
  */
 
 namespace Cocoon\Components; 
+use \Cocoon\Components\App; 
 use \Cocoon\Patterns\Singleton;
 use \Klein\Klein;
 use \Klein\Request;
@@ -19,7 +20,6 @@ class Router {
   private $klein,
           $current_uri,
           $request,
-          $rel_path,
           $path;
 
   /**
@@ -33,42 +33,32 @@ class Router {
     // Create request Object
     $this->request = Request::createFromGlobals();
 
+    // Set the current path
+    $this->setPath();
+
   }
 
   /**
    * Set the starting path to start the router from
    * in order not to collide with WordPress routing
-   * @param String $path Starting path (ex. /preventivi/cocoon)
    */
-  static function setPath($rel_path) {
-
-    // Set the relative path
-    self::instance()->rel_path = $rel_path;
+  function setPath() {
 
     // Wp installation path
     $wp_install_path = str_replace( 'http://' . $_SERVER['HTTP_HOST'], '', site_url());
 
     // Set the instance starting path
-    self::instance()->path = $wp_install_path . self::instance()->rel_path;
+    $this->path = $wp_install_path . App::getOption('path');
 
     // Grab the server-passed "REQUEST_URI"
-    self::instance()->current_uri = self::instance()->request->server()->get('REQUEST_URI');
+    $this->current_uri = $this->request->server()->get('REQUEST_URI');
 
     // Remove the starting URI from the equation
     // ex. /wp/cocoon/mypage -> /mypage
-    self::instance()->request->server()->set(
-      'REQUEST_URI', substr(self::instance()->current_uri, strlen(self::instance()->path))
+    $this->request->server()->set(
+      'REQUEST_URI', substr($this->current_uri, strlen($this->path))
     );
 
-  }
-
-  /**
-   * Get cocoon URI followed by path
-   * @param  String $add_path Path to add to the base URI
-   * @return String           Full URI
-   */
-  static function getURI($add_path = '') {
-    return site_url(self::instance()->rel_path . $add_path);
   }
 
   /**
@@ -98,6 +88,8 @@ class Router {
    * @param Function|String|Array $callback Callback
    */
   static function add ($method, $path = '*', $callback = null) {
+    if (isset($callback[1]))
+      $callback[0] = 'Cocoon\Controllers\\' . $callback[0];
     self::instance()->klein->respond($method, $path, $callback);
   }
 

@@ -1,9 +1,9 @@
 <?php
 
 namespace Cocoon\Controllers;
+use Cocoon\Components\App;
 use Cocoon\Components\Database;
 use Cocoon\Components\Template;
-use Cocoon\Components\Router;
 use Cocoon\Models\Customer;
 use Cocoon\Components\Validator;
 
@@ -70,7 +70,7 @@ class CustomersController extends BaseController {
   static function newCustomer ($request, $response, $service) {
 
     return Template::render('customers/new.twig', array(
-      'action'    =>  Router::getURI('/customers/'),
+      'action'    =>  App::getUrl('/customers/'),
       'method'    =>  'POST',
       'customer'  =>  $request->params()
     ), $service);
@@ -89,7 +89,7 @@ class CustomersController extends BaseController {
     // Update
     $customer = Customer::create($request->params());
     $service->flash('Customer created', 'info');
-    $response->redirect(Router::getURI('/customers/' . $customer->id));
+    $response->redirect(App::getUrl('/customers/' . $customer->id));
 
   }
 
@@ -105,8 +105,7 @@ class CustomersController extends BaseController {
       wp_die('Feeling smart?');
     }
 
-    $response->redirect(Router::getURI('/customers/'));
+    $response->redirect(App::getUrl('/customers/'));
   }
-
 
 }

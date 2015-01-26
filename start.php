@@ -2,38 +2,34 @@
 
 use Cocoon\Components\Router;
 use Cocoon\Components\Database;
+use Cocoon\Components\App;
 use Symfony\Component\Debug\Debug;
 
 /**
- * Configuration file
+ * Init App
  */
-$config = require 'config.php';
+App::setOptions(require 'config.php');
+App::setPluginPath(dirname(__FILE__));
 
 /**
  * Debug
  */
-if ( $config['debug'] )
+if (App::getOption('debug'))
   Debug::enable();
 
 /**
- * Define COCOON_PATH
+ * Require DB Schema
  */
-define('COCOON_PATH', dirname(__FILE__));
+require 'plugin/schema.php';
 
 /**
- * Define COCOON_CACHE
+ * Start DB connection
  */
-define('COCOON_CACHE', $config['cache']);
+Database::instance();
 
 /**
- * Set DB prefix and start DB connection (mandatory)
+ * Create DB if needed
  */
-Database::setPrefix($config['db_prefix']);
-
-/**
- * Create schema if needed
- */
-require 'schema.php';
 CooconSchema::verifyVersion();
 
 /**
@@ -41,11 +37,5 @@ CooconSchema::verifyVersion();
  * and exit if current URI doesn't match the one provided
  * Code after this line won't be evaluated if not in the path of cocoon
  */
-Router::setPath($config['uri']);
-if (!Router::inPath())
-  return;
-
-/**
- * Load routes
- */
-require 'routes.php';
+if (Router::inPath())
+  require 'plugin/routes.php'

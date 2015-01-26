@@ -1,7 +1,7 @@
 <?php
 return array(
   'debug'     =>  true,
-  'uri'       =>  '/cocoon',
+  'path'      =>  '/cocoon',
   'cache'     =>  false,
   'db_prefix' =>  'cocoon_'
 );
