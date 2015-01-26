@@ -37,9 +37,9 @@ class Template {
     $this->twig->addFunction(new Twig_SimpleFunction('createLink', array($this, 'createLinkHelper'), array('is_safe' => array('html')) ));
     $this->twig->addFunction(new Twig_SimpleFunction('deleteButton', array($this, 'deleteButtonHelper'), array('is_safe' => array('html')) ));
     $this->twig->addFunction(new Twig_SimpleFunction('getURI', array($this, 'getURIHelper') ));
-    $this->twig->addFunction(new Twig_SimpleFunction('script', array($this, 'getScript'), array('is_safe' => array('html')) ));
-    $this->twig->addFunction(new Twig_SimpleFunction('style', array($this, 'getStyle'), array('is_safe' => array('html')) ));
-    $this->twig->addFunction(new Twig_SimpleFunction('image', array($this, 'getImage'), array('is_safe' => array('html')) ));
+    $this->twig->addFunction(new Twig_SimpleFunction('script', array($this, 'getScriptHelper'), array('is_safe' => array('html')) ));
+    $this->twig->addFunction(new Twig_SimpleFunction('style', array($this, 'getStyleHelper'), array('is_safe' => array('html')) ));
+    $this->twig->addFunction(new Twig_SimpleFunction('image', array($this, 'getImageHelper'), array('is_safe' => array('html')) ));
   }
 
   /**
@@ -56,7 +56,7 @@ class Template {
    * Delete button helper
    * @param  String $text The button text 
    * @param  String $path The path starting from the main Cocoon uri
-   * @return String The full formed Button
+   * @return String The full formed Button tag
    */
   public function deleteButtonHelper ($text, $path = '') {
     require_once(ABSPATH .'wp-includes/pluggable.php');
@@ -68,12 +68,39 @@ class Template {
   }
 
   /**
-   * getURI helper
+   * getURIHelper
    * @param  String $path The path starting from the main Cocoon uri
    * @return String The full formed URI
    */
   public function getURIHelper ($path) {
     return App::getUrl($path);
+  }
+
+  /**
+   * getScriptHelper
+   * @param  String $path The path starting from the Cocoon plugin uri
+   * @return String The full formed SCRIPT tag
+   */
+  public function getScriptHelper ($path) {
+    return '<script type="text/javascript" src="' . App::getPluginUrl('/assets/js/' . $path) . '"></script>';
+  }
+
+  /**
+   * getStyleHelper
+   * @param  String $path The path starting from the Cocoon plugin uri
+   * @return String The full formed LINK tag
+   */
+  public function getStyleHelper ($path) {
+    return '<link type="text/javascript" src="' . App::getPluginUrl('/assets/css/' . $path) . '" rel="stylesheet" type="text/css"/>';
+  }
+
+  /**
+   * getImageHelper
+   * @param  String $path The path starting from the Cocoon plugin uri
+   * @return String The full formed IMG tag
+   */
+  public function getImageHelper ($path, $alt = '') {
+    return '<img src="' . App::getPluginUrl('/assets/images/' . $path) . '" alt=""/>';
   }
 
   /**

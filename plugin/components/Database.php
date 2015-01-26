@@ -75,12 +75,4 @@ class Database {
     return self::instance()->db->getDatabaseManager();
   }
 
-  /**
-   * Get the db default prefix
-   * @return String Default prefix
-   */
-  static function getPrefix () {
-    return self::$prefix;
-  }
-
 }

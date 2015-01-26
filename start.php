@@ -9,7 +9,7 @@ use Symfony\Component\Debug\Debug;
  * Init App
  */
 App::setOptions(require 'config.php');
-App::setPluginPath(dirname(__FILE__));
+App::setPluginPath(__FILE__);
 
 /**
  * Debug
@@ -38,4 +38,4 @@ CooconSchema::verifyVersion();
  * Code after this line won't be evaluated if not in the path of cocoon
  */
 if (Router::inPath())
-  require 'plugin/routes.php'
+  require 'plugin/routes.php';

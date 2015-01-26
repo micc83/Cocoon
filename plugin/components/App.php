@@ -11,6 +11,7 @@ class App {
   use Singleton;
   
   protected $config = array(),
+            $filePath,
             $pluginPath;
 
   static function getOption($name) {
@@ -23,11 +24,16 @@ class App {
   }
 
   static function setPluginPath($path) {
-    self::instance()->pluginPath = $path;
+    self::instance()->filePath = $path;
+    self::instance()->pluginPath = dirname($path);
   }
 
   static function getPluginPath($addPath ='') {
     return self::instance()->pluginPath . $addPath;
+  }
+
+  static function getPluginUrl($addPath ='') {
+    return plugins_url('', self::instance()->filePath) . '/plugin' . $addPath;
   }
 
   static function getUrl($addPath ='') {
